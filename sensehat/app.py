@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 sense = SenseHat()
 
-@app.route('/<name>')
+@app.route('/received/<name>')
 def success(name):
     return name,sense.show_message(name)
 
