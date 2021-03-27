@@ -7,11 +7,11 @@ import os
 app = Flask(__name__)
 sense = SenseHat()
 
-@app.route('/success/<name>')
+@app.route('/<name>')
 def success(name):
-    return name,sense.show_message("welcome"+name)
+    return name,sense.show_message(name)
 
-@app.route('/login', methods = ['POST','GET'])
+@app.route('/message', methods = ['POST','GET'])
 def login():
     if request.method == 'POST':
         user= request.form['nm']
