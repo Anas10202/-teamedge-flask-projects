@@ -3,6 +3,7 @@ from datetime import date
 from sense_hat import SenseHat
 import requests
 import os
+import sqlite3
 
 app = Flask(__name__)
 sense = SenseHat()
@@ -15,6 +16,11 @@ def success(name):
 def login():
     if request.method == 'POST':
         user= request.form['nm']
+        conn = sqlite3.connect('./static/data/messages.db')
+        curs = conn.cursor()
+        curs.execute("INSERT INTO messages(message) VALUES(?)",(user))
+        conn.commit()
+        conn.close
         return redirect(url_for('success', name = user))
     else:
         user = request.args.get('nm')
