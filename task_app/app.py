@@ -19,7 +19,7 @@ def remind():
 
         conn = sqlite3.connect('./static/data/reminder.db')
         curs = conn.cursor()
-        curs.execute("INSERT INTO messages (message,time) VALUES((?),VALUES(?))",(message,time))
+        curs.execute("INSERT INTO messages (reminder,time) VALUES((?),(?))",(message,time))
         conn.commit()
         conn.close()
         
