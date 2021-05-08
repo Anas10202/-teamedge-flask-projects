@@ -19,12 +19,12 @@ def remind():
 
         conn = sqlite3.connect('./static/data/reminder.db')
         curs = conn.cursor()
-        curs.execute("INSERT INTO messages (reminder,time) VALUES((?),(?))",(message,time))
+        curs.execute("INSERT INTO messages (message,time) VALUES((?),(?))",(message,time))
         conn.commit()
         conn.close()
         
 
-        return render_template('reminder.html', message = message, time=time, messages=messages)
+        return render_template('reminder.html', message = message, time=time)
     else:
         message = request.args.get('nm')
         time=request.args.get('remindertime')
