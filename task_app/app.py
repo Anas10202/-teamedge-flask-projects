@@ -16,12 +16,32 @@ def remind():
         time=request.form['remindertime']
         sense.show_message(message)
 
-        return render_template('reminder.html', message = message, time=time)
+
+        conn = sqlite3.connect('./static/data/reminder.db')
+        curs = conn.cursor()
+        curs.execute("INSERT INTO messages (message,time) VALUES((?),VALUES(?))",(message,time))
+        conn.commit()
+        conn.close()
+        
+
+        return render_template('reminder.html', message = message, time=time, messages=messages)
     else:
         message = request.args.get('nm')
         time=request.args.get('remindertime')
     
         return render_template('reminder.html', message = message, time=time)
+@app.route('/all')
+def all():
+    #connect to DB
+    conn = sqlite3.connect('./static/data/reminder.db')
+    curs = conn.cursor()
+    messages = []
+    rows = curs.execute("SELECT * from messages")
+    for row in rows:
+        message = {'message':row[0]}
+        messages.append(message)
+    conn.close()
+    return render_template('all.html', messages = messages)
 
 
 
