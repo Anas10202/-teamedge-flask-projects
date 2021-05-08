@@ -38,7 +38,7 @@ def all():
     messages = []
     rows = curs.execute("SELECT * from messages")
     for row in rows:
-        message = {'message':row[0]}
+        message = {'message':row[0],'time':row[1]}
         messages.append(message)
     conn.close()
     return render_template('all.html', messages = messages)
