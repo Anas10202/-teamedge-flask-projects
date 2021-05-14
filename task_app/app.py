@@ -44,6 +44,19 @@ def all():
     return render_template('all.html', messages = messages)
 
 
+@app.route('/button/delete/<btn>')
+def delete():
+    #connect to DB
+    conn = sqlite3.connect('./static/da ta/reminder.db')
+    curs = conn.cursor()
+    curs.execute("DELETE from messages WHERE (rowid)=VALUES(?)")
+    conn.commit()
+    conn.close()
+    return render_template('all.html')
+
+    
+
+
 
 
 if __name__=='__main__':

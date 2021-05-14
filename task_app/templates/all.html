@@ -8,7 +8,11 @@
 <body>
     <h1>Messages</h1>
     {% for message in messages %}
-    <p>{{message.message}}</p>
+    <ul>
+    <li><p>{{message['message']}}</p>
+    <p>{{message['time']}}</p></li>
+    <p><a href ="/button/delete/{{message['rowid']}}"><button>Delete</button></a></p>
+    </ul>
     {% endfor %}
 </body>
 </html>
