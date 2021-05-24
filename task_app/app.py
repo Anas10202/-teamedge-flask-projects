@@ -7,6 +7,9 @@ import sqlite3
 from flask_apscheduler import APScheduler
 
 app = Flask(__name__)
+scheduler=APScheduler()
+scheduler.init_app(app)
+scheduler.start()
 sense = SenseHat()
 
 @app.route('/',methods=['POST','GET'])
@@ -23,7 +26,6 @@ def remind():
         conn.commit()
         conn.close()
         
-
         return render_template('reminder.html', message = message, time=time)
     else:
         message = request.args.get('nm')
@@ -38,21 +40,34 @@ def all():
     messages = []
     rows = curs.execute("SELECT * from messages")
     for row in rows:
-        message = {'message':row[0],'time':row[1]}
+        message = {'message':row[0],'time':row[1],'rowid':row[2]}
         messages.append(message)
     conn.close()
+
+    scheduler.add_job(id='all', func='remind', trigger='time', run_date=time, args=[message])
     return render_template('all.html', messages = messages)
 
 
 @app.route('/button/delete/<btn>')
-def delete():
+def delete(btn):
     #connect to DB
-    conn = sqlite3.connect('./static/da ta/reminder.db')
+    conn = sqlite3.connect('./static/data/reminder.db')
     curs = conn.cursor()
-    curs.execute("DELETE from messages WHERE (rowid)=VALUES(?)")
+    curs.execute("DELETE from messages WHERE rowid=(?)",(btn,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('all'))
+
+@app.route('/button/edit/<btn>')
+def edit(btn):
+    #connect to DB
+    conn = sqlite3.connect('./static/data/reminder.db')
+    curs = conn.cursor()
+    curs.execute("UPDATE messages(message,time) VALUES((?),(?)) WHERE rowid=(?)",(btn,))
     conn.commit()
     conn.close()
     return render_template('all.html')
+
 
     
 
