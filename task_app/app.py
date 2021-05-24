@@ -44,7 +44,7 @@ def all():
         messages.append(message)
     conn.close()
 
-    scheduler.add_job(id='all', func='remind', trigger='time', run_date=time, args=[message])
+   scheduler.add_job(id=row[2], func='show_remind', trigger='time', run_date=row[1], args=row[0])
     return render_template('all.html', messages = messages)
 
 
@@ -67,6 +67,9 @@ def edit(btn):
     conn.commit()
     conn.close()
     return render_template('all.html')
+def show_reminder(reminder):
+    sense.show_message(args)
+    return 0
 
 
     
