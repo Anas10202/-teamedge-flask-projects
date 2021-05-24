@@ -42,9 +42,12 @@ def all():
     for row in rows:
         message = {'message':row[0],'time':row[1],'rowid':row[2]}
         messages.append(message)
+        print(row[0],row[1],row[2])
+        scheduler.add_job(id=str(row[2]), func='show_remind', trigger='date', run_date=row[1], args=[row[0]])
+        
     conn.close()
 
-    scheduler.add_job(id=row[2], func='show_remind', trigger='time', run_date=row[1], args=row[0])
+    
     return render_template('all.html', messages = messages)
 
 
@@ -67,8 +70,10 @@ def edit(btn):
     conn.commit()
     conn.close()
     return render_template('all.html')
-def show_reminder(reminder):
-    sense.show_message(args)
+
+
+def show_remind(reminder):
+    sense.show_message(reminder)
     return 0
 
 
