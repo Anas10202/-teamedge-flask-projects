@@ -44,7 +44,7 @@ def all():
         messages.append(message)
     conn.close()
 
-   scheduler.add_job(id=row[2], func='show_remind', trigger='time', run_date=row[1], args=row[0])
+    scheduler.add_job(id=row[2], func='show_remind', trigger='time', run_date=row[1], args=row[0])
     return render_template('all.html', messages = messages)
 
 
